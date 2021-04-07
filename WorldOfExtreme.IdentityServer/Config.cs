@@ -6,6 +6,7 @@ namespace WorldOfExtreme.IdentityServer
 {
     public class Config
     {
+        public static string HOST_URL = "https://localhost:44305";
         public static IEnumerable<IdentityResource> GetIdentityResources()
         {
             return new List<IdentityResource>
@@ -13,7 +14,7 @@ namespace WorldOfExtreme.IdentityServer
                 new IdentityResources.OpenId(),
                 new IdentityResources.Profile(),
                 new IdentityResources.Email(), 
-                new IdentityResource("dataeventrecordsir",new []{ "role", "admin", "user"} )
+                new IdentityResource("worldOfExtreme",new []{ "role", "admin", "user"} )
             };
         }
 
@@ -21,7 +22,7 @@ namespace WorldOfExtreme.IdentityServer
         {
             return new List<ApiScope>
             {
-                new ApiScope("dataEventRecords", "Scope for the dataEventRecords ApiResource",
+                new ApiScope("worldOfExtreme", "Scope for the worldOfExtreme ApiResource",
                     new List<string> { "role", "admin", "user"}),
                
             };
@@ -31,13 +32,13 @@ namespace WorldOfExtreme.IdentityServer
         {
             return new List<ApiResource>
             {
-                new ApiResource("dataEventRecordsApi")
+                new ApiResource("worldOfExtreme")
                 {
                     ApiSecrets =
                     {
-                        new Secret("dataEventRecordsSecret".Sha256())
+                        new Secret("worldOfExtremeSecret".Sha256())
                     }, 
-                    Scopes = new List<string> { "dataEventRecords" }
+                    Scopes = new List<string> { "worldOfExtreme" }
                 }
             };
         }
@@ -78,7 +79,8 @@ namespace WorldOfExtreme.IdentityServer
                         "openid",
                         "role",
                         "profile",
-                        "email"
+                        "email",
+                        "user"
                     }
                 }
             };
