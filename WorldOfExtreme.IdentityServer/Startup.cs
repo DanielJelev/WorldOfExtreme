@@ -10,12 +10,16 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using WorldOfExtreme.IdentityServer.Data;
+using WorldOfExtreme.IdentityServer.Data.Seed;
 using WorldOfExtreme.IdentityServer.Model;
 using WorldOfExtreme.IdentityServer.Services.Certificate;
+using WorldOfExtreme.Infrastructure.Extensions;
+using WorldOfExtreme.Infrastructure.Interface;
 
 namespace WorldOfExtreme.IdentityServer
 {
@@ -64,15 +68,23 @@ namespace WorldOfExtreme.IdentityServer
             });
 
             services.AddScoped<ApplicationDbContext>();
-            services.AddTransient<SeedData>();
 
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DatabaseConnection")));
 
 
-            services.AddIdentity<ApplicationUser, IdentityRole>()
+            services.AddIdentity<ApplicationUser, ApplicationRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
+
+            services.Configure<IdentityOptions>(options =>
+            {
+                options.Password.RequiredLength = 6;
+                options.Password.RequireUppercase = false;
+                options.Password.RequireLowercase = false;
+                options.Password.RequireDigit = false;
+                options.Password.RequireNonAlphanumeric = false;
+            });
 
             services.AddAntiforgery(options =>
             {
@@ -80,15 +92,6 @@ namespace WorldOfExtreme.IdentityServer
                 options.Cookie.SameSite = SameSiteMode.Strict;
                 options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
             });
-
-            services.AddAuthentication()
-                 .AddOpenIdConnect("aad", "Login with Azure AD", options =>
-                 {
-                     options.Authority = $"https://login.microsoftonline.com/common";
-                     options.TokenValidationParameters = new TokenValidationParameters { ValidateIssuer = false };
-                     options.ClientId = "99eb0b9d-ca40-476e-b5ac-6f4c32bfb530";
-                     options.CallbackPath = "/signin-oidc";
-                 });
 
             services.AddAuthorization();
 
@@ -115,9 +118,16 @@ namespace WorldOfExtreme.IdentityServer
             });
         }
 
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, SeedData seeder)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            seeder.SeedAdminUser();
+            var seeders = new List<ISeeder>()
+            {
+                new RolesSeeder(),
+                new UsersSeeder(),
+            };
+
+            app.Initialize<ApplicationDbContext>(seeders);
+
             app.UseCookiePolicy();
 
             if (env.IsDevelopment())
@@ -155,7 +165,7 @@ namespace WorldOfExtreme.IdentityServer
 
             app.UseIdentityServer();
             app.UseAuthorization();
-
+            app.UseAuthentication();
             app.UseSession();
 
             app.UseEndpoints(endpoints =>

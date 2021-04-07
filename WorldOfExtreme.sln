@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31005.135
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WorldOfExtreme.IdentityServer", "WorldOfExtreme.IdentityServer\WorldOfExtreme.IdentityServer.csproj", "{07545C09-A26D-447F-8CEE-F9565E3E3E07}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WorldOfExtreme.IdentityServer", "WorldOfExtreme.IdentityServer\WorldOfExtreme.IdentityServer.csproj", "{07545C09-A26D-447F-8CEE-F9565E3E3E07}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WorldOfExtreme.Infrastructure", "WorldOfExtreme.Infrastructure\WorldOfExtreme.Infrastructure.csproj", "{1F48BB1A-BF9E-4A53-9348-28C9AE129778}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{07545C09-A26D-447F-8CEE-F9565E3E3E07}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{07545C09-A26D-447F-8CEE-F9565E3E3E07}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{07545C09-A26D-447F-8CEE-F9565E3E3E07}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1F48BB1A-BF9E-4A53-9348-28C9AE129778}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1F48BB1A-BF9E-4A53-9348-28C9AE129778}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1F48BB1A-BF9E-4A53-9348-28C9AE129778}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1F48BB1A-BF9E-4A53-9348-28C9AE129778}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
