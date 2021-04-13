@@ -22,11 +22,14 @@ namespace WorldOfExtreme.IdentityServer.Data.Seed
                 var adminUser = new ApplicationUser
                 {
                     UserName = "admin",
+                    Email = "admin@admin.com"
                 };
 
                 var user = new ApplicationUser
                 {
                     UserName = "user",
+                    Email = "user@user.com"
+
                 };
 
                 await userManager.CreateAsync(adminUser, "admin123");

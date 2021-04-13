@@ -56,9 +56,9 @@ namespace WorldOfExtreme.IdentityServer
                         builder
                             .AllowCredentials()
                             .WithOrigins(
-                                "https://localhost:44311",
+                                "https://localhost:4200",
                                 "https://localhost:44352",
-                                "https://localhost:44372",
+                                "https://localhost:4200",
                                 "https://localhost:44378",
                                 "https://localhost:44390")
                             .SetIsOriginAllowedToAllowWildcardSubdomains()
@@ -99,8 +99,10 @@ namespace WorldOfExtreme.IdentityServer
             {
                 options.Filters.Add(new SecurityHeadersAttribute());
             });
+            X509Certificate2 cert = new X509Certificate2(Path.Combine(_environment.ContentRootPath, "damienbodserver.pfx"), "");
 
             services.AddIdentityServer()
+                .AddSigningCredential(cert)
                 .AddInMemoryIdentityResources(Config.GetIdentityResources())
                 .AddInMemoryApiResources(Config.GetApiResources())
                 .AddInMemoryApiScopes(Config.GetApiScopes())
@@ -170,9 +172,9 @@ namespace WorldOfExtreme.IdentityServer
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllerRoute(
-                    name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                endpoints
+                 .MapDefaultControllerRoute()
+                 .RequireAuthorization();
             });
         }
 

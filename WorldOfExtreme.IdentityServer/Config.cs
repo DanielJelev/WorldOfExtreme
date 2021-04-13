@@ -6,7 +6,7 @@ namespace WorldOfExtreme.IdentityServer
 {
     public class Config
     {
-        public static string HOST_URL = "https://localhost:44305";
+        public static string HOST_URL = "https://localhost:51786";
         public static IEnumerable<IdentityResource> GetIdentityResources()
         {
             return new List<IdentityResource>
@@ -14,7 +14,7 @@ namespace WorldOfExtreme.IdentityServer
                 new IdentityResources.OpenId(),
                 new IdentityResources.Profile(),
                 new IdentityResources.Email(), 
-                new IdentityResource("worldOfExtreme",new []{ "role", "admin", "user"} )
+                new IdentityResource("worldOfExtreme.identity",new []{ "role", "admin", "user"} )
             };
         }
 
@@ -22,7 +22,7 @@ namespace WorldOfExtreme.IdentityServer
         {
             return new List<ApiScope>
             {
-                new ApiScope("worldOfExtreme", "Scope for the worldOfExtreme ApiResource",
+                new ApiScope("worldOfExtreme.api", "Scope for the worldOfExtreme ApiResource",
                     new List<string> { "role", "admin", "user"}),
                
             };
@@ -32,13 +32,13 @@ namespace WorldOfExtreme.IdentityServer
         {
             return new List<ApiResource>
             {
-                new ApiResource("worldOfExtreme")
+                new ApiResource("worldOfExtreme.apiresourec")
                 {
                     ApiSecrets =
                     {
                         new Secret("worldOfExtremeSecret".Sha256())
                     }, 
-                    Scopes = new List<string> { "worldOfExtreme" }
+                    Scopes = new List<string> { "worldOfExtreme.api" }
                 }
             };
         }
@@ -51,8 +51,8 @@ namespace WorldOfExtreme.IdentityServer
             {
                 new Client
                 {
-                    ClientName = "angularclient",
-                    ClientId = "angularclient",
+                    ClientName = "worldofextremeclient",
+                    ClientId = "worldofextremeclient",
                     AccessTokenType = AccessTokenType.Reference,
                     AccessTokenLifetime = 360,// 120 seconds, default 60 minutes
                     IdentityTokenLifetime = 30,
@@ -61,18 +61,18 @@ namespace WorldOfExtreme.IdentityServer
                     AllowAccessTokensViaBrowser = true,
                     RedirectUris = new List<string>
                     {
-                        "https://localhost:44372",
-                        "https://localhost:44372/silent-renew.html"
+                        "https://localhost:4200",
+                        "https://localhost:4200/silent-renew.html"
 
                     },
                     PostLogoutRedirectUris = new List<string>
                     {
-                        "https://localhost:44372/Unauthorized"
+                        "https://localhost:4200/Unauthorized"
                     },
                     AllowedCorsOrigins = new List<string>
                     {
-                        "https://localhost:44372",
-                        "http://localhost:44372"
+                        "https://localhost:4200",
+                        "http://localhost:4200"
                     },
                     AllowedScopes = new List<string>
                     {

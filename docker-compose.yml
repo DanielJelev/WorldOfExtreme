@@ -1,0 +1,21 @@
+version: '3.4'
+
+services:
+    identity:
+       container_name: identity
+       user: root
+       build: 
+           context: .
+           dockerfile: WorldOfExtreme.IdentityServer/Dockerfile
+       ports:
+           - "5004:443"
+           - "5003:80"
+       env_file: ./WorldOfExtreme.Infrastructure/infrastructure.env
+       restart: on-failure
+       environment:
+           - ConnectionStrings__DefaultConnection=Server=192.168.100.9;Database=WorldOfExtreme.IdentityServer;User Id=SA;Password=PasswoSdasd1rSaFd!123;MultipleActiveResultSets=true
+           - ASPNETCORE_ENVIRONMENT=Development
+           - ASPNETCORE_URLS=https://+:443;http://+:80
+           - ASPNETCORE_HTTPS_PORT=5004
+volumes:
+    sqldata:
