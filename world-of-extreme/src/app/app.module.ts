@@ -21,21 +21,14 @@ import { AuthorizationGuard } from './authorization.guard';
 export function configureAuth(oidcConfigService: OidcConfigService) {
     return () =>
         oidcConfigService.withConfig({
-            stsServer: 'https://localhost:51786',
-            redirectUrl: 'https://localhost:4200',
-            clientId: 'worldofextremeclient',
-            responseType: 'id_token',
-            scope: 'openid profile email',
-            postLogoutRedirectUri: 'https://localhost:4200/Unauthorized',
-            startCheckSession: false,
-            silentRenew: true,
-            silentRenewUrl: 'https://localhost:4200/silent-renew.html',
-            postLoginRoute: '/home',
-            forbiddenRoute: '/Forbidden',
-            unauthorizedRoute: '/Unauthorized',
-            logLevel: 0, // LogLevel.Debug, 
-            autoCleanStateAfterAuthentication: false
-            // autoUserinfo: false,
+          stsServer: 'https://localhost:57526',
+          redirectUrl: window.location.origin,
+          postLogoutRedirectUri: window.location.origin,
+          clientId: 'worldofextremeclient',
+          scope: 'openid profile email worldOfExtreme_profile',
+          responseType: 'code',
+          silentRenew: true,
+          useRefreshToken: true,
         });
 }
 
