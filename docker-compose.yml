@@ -1,21 +1,32 @@
 version: '3.4'
 
 services:
+    data:
+        container_name: worldofextreme_sqlserver
+        image: microsoft/mssql-server-windows-developer
+        environment:
+            - ACCEPT_EULA=Y
+            - SA_PASSWORD=PasswoSdasd1rSaFd!123
+        networks:
+            - worldofextreme_network
+
     identity:
        container_name: identity
        user: root
        build: 
            context: .
-           dockerfile: WorldOfExtreme.IdentityServer/Dockerfile
-       ports:
-           - "5004:443"
-           - "5003:80"
+           dockerfile: WorldOfExtreme.Identity/Dockerfile
        env_file: ./WorldOfExtreme.Infrastructure/infrastructure.env
        restart: on-failure
        environment:
-           - ConnectionStrings__DefaultConnection=Server=192.168.100.9;Database=WorldOfExtreme.IdentityServer;User Id=SA;Password=PasswoSdasd1rSaFd!123;MultipleActiveResultSets=true
+           - ConnectionStrings__DefaultConnection=Server=worldofextreme_sqlserver;Database=worldofextreme.IdentityServer;User Id=SA;Password=PasswoSdasd1rSaFd!123;MultipleActiveResultSets=true
            - ASPNETCORE_ENVIRONMENT=Development
-           - ASPNETCORE_URLS=https://+:443;http://+:80
-           - ASPNETCORE_HTTPS_PORT=5004
+       networks:
+           - worldofextreme_network
+       depends_on:
+           - data
+networks:
+    worldofextreme_network:
+
 volumes:
     sqldata:

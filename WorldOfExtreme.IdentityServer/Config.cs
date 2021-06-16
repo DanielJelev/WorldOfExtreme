@@ -1,20 +1,20 @@
 ﻿using IdentityServer4.Models;
 using Microsoft.Extensions.Configuration;
 using System.Collections.Generic;
+using System.Security.Claims;
 
 namespace WorldOfExtreme.IdentityServer
 {
     public class Config
     {
-        public static string HOST_URL = "https://localhost:51786";
+        public static string HOST_URL = "https://localhost:65027";
         public static IEnumerable<IdentityResource> GetIdentityResources()
         {
             return new List<IdentityResource>
             {
                 new IdentityResources.OpenId(),
                 new IdentityResources.Profile(),
-                new IdentityResources.Email(), 
-                new IdentityResource("worldOfExtreme.identity",new []{ "role", "admin", "user"} )
+                new IdentityResources.Email(),
             };
         }
 
@@ -22,9 +22,7 @@ namespace WorldOfExtreme.IdentityServer
         {
             return new List<ApiScope>
             {
-                new ApiScope("worldOfExtreme.api", "Scope for the worldOfExtreme ApiResource",
-                    new List<string> { "role", "admin", "user"}),
-               
+                     new ApiScope("worldOfExtreme_profile", "Scope for the hooray_Api ApiResource")
             };
         }
 
@@ -32,14 +30,15 @@ namespace WorldOfExtreme.IdentityServer
         {
             return new List<ApiResource>
             {
-                new ApiResource("worldOfExtreme.apiresourec")
+                 new ApiResource("worldOfExtremeProfile")
                 {
                     ApiSecrets =
                     {
-                        new Secret("worldOfExtremeSecret".Sha256())
-                    }, 
-                    Scopes = new List<string> { "worldOfExtreme.api" }
-                }
+                        new Secret("worldOfExtremeProfileSecret".Sha256())
+                    },
+                    UserClaims = { "role", "admin", "user", "worldOfExtremeProfileSecret", "worldOfExtremeProfile.admin", "worldOfExtremeProfile.user" }
+                },
+
             };
         }
 
@@ -49,40 +48,43 @@ namespace WorldOfExtreme.IdentityServer
             // client credentials client
             return new List<Client>
             {
-                new Client
+                  new Client
                 {
                     ClientName = "worldofextremeclient",
                     ClientId = "worldofextremeclient",
-                    AccessTokenType = AccessTokenType.Reference,
-                    AccessTokenLifetime = 360,// 120 seconds, default 60 minutes
-                    IdentityTokenLifetime = 30,
-                    AllowedGrantTypes = GrantTypes.Implicit,
+
+                    AccessTokenLifetime = 330,// 330 seconds, default 60 minutes
+                    IdentityTokenLifetime = 45,
                     AlwaysIncludeUserClaimsInIdToken = true,
                     AllowAccessTokensViaBrowser = true,
                     RedirectUris = new List<string>
                     {
-                        "https://localhost:4200",
-                        "https://localhost:4200/silent-renew.html"
-
+                        "https://localhost:4200"
                     },
                     PostLogoutRedirectUris = new List<string>
                     {
-                        "https://localhost:4200/Unauthorized"
+                        "https://localhost:4200/unauthorized",
+                        "https://localhost:4200"
                     },
                     AllowedCorsOrigins = new List<string>
                     {
-                        "https://localhost:4200",
-                        "http://localhost:4200"
+                        "https://localhost:4200"
                     },
-                    AllowedScopes = new List<string>
-                    {
-                        "openid",
-                        "role",
-                        "profile",
-                        "email",
-                        "user"
-                    }
-                }
+
+                    RequireClientSecret = false,
+
+                    AllowedGrantTypes = GrantTypes.Code,
+                    RequirePkce = true,
+                    AllowedScopes = {
+                         "openid",
+                         "profile",
+                         "email",
+                         "worldOfExtreme_profile",
+                     },
+
+                    AllowOfflineAccess = true,
+                    RefreshTokenUsage = TokenUsage.OneTimeOnly
+                },
             };
         }
     }

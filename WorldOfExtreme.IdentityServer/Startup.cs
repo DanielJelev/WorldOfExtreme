@@ -57,7 +57,7 @@ namespace WorldOfExtreme.IdentityServer
                             .AllowCredentials()
                             .WithOrigins(
                                 "https://localhost:4200",
-                                "https://localhost:44352",
+                                "https://localhost:65006",
                                 "https://localhost:4200",
                                 "https://localhost:44378",
                                 "https://localhost:44390")
